@@ -830,44 +830,8 @@ public class MainFrame implements ActionListener, ComponentListener, MouseWheelL
        } else if (e.getSource() == record) {
 
 
-        /*    map.resetVals();
-            String input = JOptionPane.showInputDialog(mainFrame, "Recording length(Nubot Time)");
-            recordingLength = Integer.parseInt(input);
+            recordDialog.show();
 
-            double nt = Double.parseDouble(JOptionPane.showInputDialog(mainFrame, "Real to Nubot time ratio"));
-            driver.nubRatio = nt > 0 ? nt : 1;
-            if (recordingLength > 0) {
-
-                try{
-                    String vidName = JOptionPane.showInputDialog("Video Name","Name");
-                    vidName = vidName.length()>0 ? vidName : rulesFileName;
-                    driver.nubotVideo = new NubotVideo(800,600,QuickTimeWriter.VIDEO_PNG,20, vidName);
-
-                    NubotDrawer.drawNubotVideoFrame(driver.nubotVideo.getBFI(), "#Monomers: " + map.size() + "\nStep: " + map.markovStep + "\nTime: " + map.timeElapsed, new ArrayList<Monomer>(map.values()), driver.nubotVideo.getMonomerRadius(), driver.nubotVideo.getOffset());
-                    driver.nubotVideo.encodeFrame(1);
-
-                }
-                catch(Exception exc)
-                {
-                    System.out.println("recording : exc.getMessage()");
-                }
-               map.simulation.animate = false;
-               map.simulation.recordingLength = recordingLength;
-               map.simulation.isRecording = true;
-                map.timeElapsed = 0;
-               map.simulation.isRunning = true;
-                map.isFinished = false;
-               map.simulation.isPaused = false;
-                simStop.setEnabled(true);
-                driver.simStart();
-                statusSimulation.setText("Recording.");
-                JOptionPane.showMessageDialog(mainFrame, "The simulation is recording and will not be animated.");
-
-            }
-
-            System.out.println("record button started");
-             */
-           driver.recordSim(50, 10, false, 5.0, false);
         }
 
         else if (e.getSource() == editToggle) {
@@ -877,7 +841,7 @@ public class MainFrame implements ActionListener, ComponentListener, MouseWheelL
         }
 
 
-       
+
     }
 
 
@@ -895,13 +859,13 @@ public class MainFrame implements ActionListener, ComponentListener, MouseWheelL
       final JTextField lengthField = new JTextField();
       lengthField.setMaximumSize(new Dimension(40,20));
       lengthField.setPreferredSize(new Dimension(40,20));
-      JTextField ratioField = new JTextField();
+      final JTextField ratioField = new JTextField();
       ratioField.setMaximumSize(new Dimension(20,20));
       ratioField.setPreferredSize(new Dimension(20,20));
       videoNameBox.add(nameField);
       Box lengthBox = new Box(BoxLayout.X_AXIS);
       final JCheckBox toEndCB = new JCheckBox("Finish");
-      JRadioButton realToNubotCB = new JRadioButton("R/N");
+      final JRadioButton realToNubotCB = new JRadioButton("R/N");
       JRadioButton nubotToRealCB = new JRadioButton("N/R");
       ButtonGroup ratioGroup = new ButtonGroup();
       ratioGroup.add(realToNubotCB);
@@ -910,7 +874,7 @@ public class MainFrame implements ActionListener, ComponentListener, MouseWheelL
       lengthBox.add(new JLabel("Length:"));
       lengthBox.add(lengthField);
       lengthBox.add(toEndCB);
-      Box ratioBox = new Box(BoxLayout.X_AXIS);
+      final Box ratioBox = new Box(BoxLayout.X_AXIS);
       ratioBox.add(new JLabel("Ratio:"));
       ratioBox.add(ratioField);
       ratioBox.add(realToNubotCB);
@@ -922,7 +886,7 @@ public class MainFrame implements ActionListener, ComponentListener, MouseWheelL
       multField.setMaximumSize(new Dimension(25, 20));
       multField.setPreferredSize(new Dimension(25, 20));
       multBox.add(multCB);
-      multBox.add(new JLabel("Count:"));
+     // multBox.add(new JLabel("Count:"));
       multBox.add(multField);
       Box choiceBox = new Box(BoxLayout.X_AXIS);
       final JButton startButton =  new JButton("Start");
@@ -951,15 +915,46 @@ public class MainFrame implements ActionListener, ComponentListener, MouseWheelL
             }
             if(e.getSource() == startButton)
             {
+
                if(!nameField.getText().isEmpty())
                {
+                   int recordingsCount  = 1;
+                   boolean toEnd = false;
+                   boolean RtN = true;
+                   int recordingLength = 1;
+                   double ratio = 1.0;
                      if(multCB.isSelected())
                      {
+                         if(!multField.getText().isEmpty())
+                         {
+                             recordingsCount = Integer.parseInt(multField.getText()) > 0 ? Integer.parseInt(multField.getText()) : 1;
+                         }
 
                      }
+                   if(toEndCB.isSelected())
+                   {
+                       toEnd = true;
+                   }
+                   else
+                   {
+                       recordingLength = Integer.parseInt(lengthField.getText()) > 0 ? Integer.parseInt(lengthField.getText()) : 1;
+                   }
+                   if(realToNubotCB.isSelected())
+                   {
+                        RtN = true;
+                   }
+                   else RtN = false;
+                   if(!ratioField.getText().isEmpty())
+                   {
+                       ratio = Double.parseDouble(ratioField.getText()) > 0 ? Double.parseDouble(ratioField.getText()) : 1;
+                   }
 
-
+                    driver.recordSim(nameField.getText(), recordingsCount, recordingLength, toEnd, ratio, RtN);
                }
+
+
+
+
 
             }
             if(e.getSource() == cancelButton)
@@ -980,7 +975,7 @@ public class MainFrame implements ActionListener, ComponentListener, MouseWheelL
       recordDialog.add(multBox);
       recordDialog.add(choiceBox);
       recordDialog.pack();
-      recordDialog.show();
+
 
    }
 

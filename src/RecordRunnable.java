@@ -97,7 +97,7 @@ public class RecordRunnable implements  Runnable{
                      new ArrayList<Monomer>(mapCopy.values()),
                      nubotVideo.getMonomerRadius(),
                      nubotVideo.getOffset());
-               nubotVideo.encodeFrame(5);
+               nubotVideo.encodeFrame(40);
                nubotVideo.finish();
             }
 

@@ -105,7 +105,7 @@ public class Driver {
         if(simHeartBeat !=null && simHeartBeat.isAlive())
             simHeartBeat.interrupt();
     }
-   public void recordSim(int numRecords, int recordLength, boolean toEnd, double ratio, boolean RtoN)
+   public void recordSim(String vidName, int numRecords, int recordLength, boolean toEnd, double ratio, boolean RtoN)
    {
 
     execServ = Executors.newFixedThreadPool(numRecords);
@@ -118,7 +118,7 @@ public class Driver {
          rMap.simulation.isRunning = true;
 
 
-        execServ.submit(new RecordRunnable(new NubotVideo(800,600, QuickTimeWriter.VIDEO_PNG,20, "ST" + i), rMap, ratio));
+        execServ.submit(new RecordRunnable(new NubotVideo(800,600, QuickTimeWriter.VIDEO_PNG,20, vidName + i), rMap, ratio));
 
       }
       execServ.shutdown();
