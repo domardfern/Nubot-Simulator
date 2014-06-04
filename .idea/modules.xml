@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/JavaNubotSimulator.iml" filepath="$PROJECT_DIR$/.idea/JavaNubotSimulator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JavaNubotSimulator.iml" filepath="$PROJECT_DIR$/JavaNubotSimulator.iml" />
     </modules>
   </component>
 </project>
