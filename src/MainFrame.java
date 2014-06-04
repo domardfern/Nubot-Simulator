@@ -866,14 +866,18 @@ public class MainFrame implements ActionListener, ComponentListener, MouseWheelL
             }
 
             System.out.println("record button started");
-        } else if (e.getSource() == editToggle) {
+             */
+           driver.recordSim(50, 10, false, 5.0, false);
+        }
+
+        else if (e.getSource() == editToggle) {
             System.out.println("edit Toggle");
             editMode = true;
             editToolBar.setVisible(editToggle.getState());
         }
-        */
-          driver.recordSim(50, 10, false, 5.0, false);
-       }
+
+
+       
     }
 
 
