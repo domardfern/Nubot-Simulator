@@ -134,8 +134,11 @@ public class NubotVideo implements NubotDraws {
     }
     public void encodeFrame(long duration)
     {
+        if(duration < 1)
+            duration = 1;
         if(this.ready && this.qtWriter!=null)
         {
+            System.out.println("sup " + duration  + "  " + this.frameRate);
             try
             {
                      if(duration > this.frameRate)
@@ -146,7 +149,7 @@ public class NubotVideo implements NubotDraws {
                         {
                            this.qtWriter.write(0, cFrameBFI, 20);
                         }
-                        this.qtWriter.write(0, cFrameBFI, duration % this.frameRate);
+                        this.qtWriter.write(0, cFrameBFI, duration % this.frameRate );
                      }
                   else
                     this.qtWriter.write(0, cFrameBFI, duration);

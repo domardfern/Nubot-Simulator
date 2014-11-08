@@ -1,6 +1,5 @@
 import org.javatuples.Pair;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -26,17 +25,29 @@ public class RecordRunnable implements  Runnable{
 
    @Override
    public void run() {
+       double t;
+
+       double realt;
+       double fakeFloorRealT;
       while (mapCopy.simulation.isRunning) {
+
          if (mapCopy.simulation.isRecording) {
 
-            double t = mapCopy.computeTimeStep();
-            double realt = t * nubRatio;
-            double fakeFloorRealT = realt - (realt % nubotVideo.getFrameDuration());
+             t = mapCopy.computeTimeStep();
+             realt = t * nubRatio;
+             fakeFloorRealT = realt - (realt % nubotVideo.getFrameDuration());
             System.out.println(mapCopy.size());
+             System.out.println("recording running"  + t   + " " + nubRatio  + " " + realt + " " + nubotVideo.getFrameDuration());
             if (fakeFloorRealT - mapCopy.simulation.lastr >= nubotVideo.getFrameDuration()) {
 
+                System.out.println("d" + (Math.round((fakeFloorRealT - mapCopy.simulation.lastr) / nubotVideo.getFrameDuration()) - 1));
                NubotDrawer.drawNubotVideoFrame(nubotVideo.getBFI(), "#Monomers: " + mapCopy.size() + "\nStep: " + mapCopy.markovStep + "\nTime: " + Double.toString(mapCopy.timeElapsed), new ArrayList<Monomer>(mapCopy.values()), nubotVideo.getMonomerRadius(), nubotVideo.getOffset());
+
+
+
                nubotVideo.encodeFrame(Math.round((fakeFloorRealT - mapCopy.simulation.lastr) / nubotVideo.getFrameDuration()) - 1);
+
+
                System.out.println((((fakeFloorRealT - mapCopy.simulation.lastr) / nubotVideo.getFrameDuration()) - 1) + "ffrt/gfd-1 ");
 
                mapCopy.executeFrame();
@@ -97,7 +108,7 @@ public class RecordRunnable implements  Runnable{
                      new ArrayList<Monomer>(mapCopy.values()),
                      nubotVideo.getMonomerRadius(),
                      nubotVideo.getOffset());
-               nubotVideo.encodeFrame(40);
+               nubotVideo.encodeFrame(1);
                nubotVideo.finish();
             }
 

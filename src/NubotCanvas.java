@@ -80,7 +80,8 @@ public class NubotCanvas extends JComponent implements NubotDraws {
     public void init()
     {
         canvasBFI = new BufferedImage(canvasDimension.width, canvasDimension.height, BufferedImage.TYPE_INT_ARGB);
-        canvasGFX = (Graphics2D)canvasBFI.getGraphics();
+        canvasGFX = canvasBFI.createGraphics();
+        canvasGFX.setClip(0,0,canvasDimension.width, canvasDimension.height);
         canvasGFX.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         XYDrawOffset.setLocation(canvasDimension.width/2, -canvasDimension.height/2);
         //for the nubot graphics/image & visuals
@@ -98,7 +99,7 @@ public class NubotCanvas extends JComponent implements NubotDraws {
        g.drawImage(canvasBFI, 0,0, null);
       g.drawImage(hudBFI, 0, 0, null);
 
-;   }
+   }
     public Graphics2D getGFX(){
         return canvasGFX;
     }

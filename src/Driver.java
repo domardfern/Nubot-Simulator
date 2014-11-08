@@ -1,11 +1,7 @@
-import org.javatuples.Pair;
 import org.monte.media.quicktime.QuickTimeWriter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -44,13 +40,14 @@ public class Driver {
                     try {
 
                         if (!map.simulation.isRecording)
-                            Thread.sleep((long) (30+  map.simulation.speedRate * 1000.0 * map.timeStep));
+                            Thread.sleep((long) (  map.simulation.speedRate * 1000.0 * map.timeStep));
 
 
 
 
 
                         if (map.simulation.animate) {
+                            map.computeTimeStep();
                             map.executeFrame();
                             mainFrame.renderNubot(map.values());
 

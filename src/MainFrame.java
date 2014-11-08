@@ -5,8 +5,6 @@
 // Copyright (c) 2014 Algorithmic Self-Assembly Research Group. All rights reserved.
 //
 
-import org.monte.media.quicktime.QuickTimeWriter;
-
 import javax.swing.*;
 import javax.swing.Timer;
 import javax.swing.border.BevelBorder;
@@ -37,6 +35,7 @@ public class MainFrame implements ActionListener, ComponentListener, MouseWheelL
 
     //Config and rules
     Configuration map = Configuration.getInstance();
+    Monomer[] mapCopy;
 
     //Graphics
     Monomer posLockMon;
@@ -289,7 +288,7 @@ public class MainFrame implements ActionListener, ComponentListener, MouseWheelL
         file.add(loadC);
         file.add(exportC);
         file.add(new JSeparator(SwingConstants.HORIZONTAL));
-        file.add(menuReload);
+      //  file.add(menuReload);
         file.add(menuClear);
         file.add(menuQuit);
         simulation.add(simStart);
@@ -367,7 +366,9 @@ public class MainFrame implements ActionListener, ComponentListener, MouseWheelL
                         speedRate = 1;
                     else if (speedRate < 1) {
                         speedRate = (speedMax + speedRate + 1) / 10;
+
                     }
+                    map.simulation.speedRate = speedRate;
                     System.out.println("speed changed to: " + speedRate);
                     statusSpeed.setText("Speed: " + speedRate);
                 }
@@ -587,6 +588,7 @@ public class MainFrame implements ActionListener, ComponentListener, MouseWheelL
                 File theFile = jfc.getSelectedFile();
                 //if the selected file is of the right extension
                 if (theFile.length() > 5 && theFile.getName().substring(theFile.getName().length() - 6, theFile.getName().length()).matches(".rules")) {
+                    System.out.println("SD");
                    map.rules.clear();
                    rulesFileName = theFile.getName();
                    FileReader fre = new FileReader(theFile);
@@ -717,6 +719,7 @@ public class MainFrame implements ActionListener, ComponentListener, MouseWheelL
                       simStart.setEnabled(true);
                       record.setEnabled(true);
                       setStatus("Ready to Start", null, null, null, null, null);
+                      map.values().toArray(mapCopy);
 
 
                    }
@@ -729,9 +732,14 @@ public class MainFrame implements ActionListener, ComponentListener, MouseWheelL
        } else if (e.getSource() == menuReload) {
           map.clear();
           map.resetVals();
-
+          if(mapCopy!=null && map.simulation.configLoaded ) {
+              for (Monomer m : mapCopy)
+              {
+                  map.addMonomer(m);
+              }
+          }
           renderNubot(map.values());
-          statusTime.setText("Time: 0.0");
+           setStatus(null, null, "Config loaded ", "Monomers: " + map.size(), null, null);
           System.out.println("Reload configuration");
 
        } else if (e.getSource() == menuClear) {
@@ -867,6 +875,7 @@ public class MainFrame implements ActionListener, ComponentListener, MouseWheelL
       final JCheckBox toEndCB = new JCheckBox("Finish");
       final JRadioButton realToNubotCB = new JRadioButton("R/N");
       JRadioButton nubotToRealCB = new JRadioButton("N/R");
+       nubotToRealCB.setSelected(true);
       ButtonGroup ratioGroup = new ButtonGroup();
       ratioGroup.add(realToNubotCB);
       ratioGroup.add(nubotToRealCB);

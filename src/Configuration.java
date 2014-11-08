@@ -86,8 +86,13 @@ public class Configuration extends HashMap<Point, Monomer> {
 
         if (numberOfActions > 0) {
             timeStepCalculated = true;
-            timeStep = this.simulation.calculateExpDistribution(numberOfActions);
+            if(!simulation.agitationON)
+            timeStep = this.simulation.calculateExpDistribution(actions.size());
+            else
+            timeStep =  this.simulation.calculateExpDistribution(actions.size() + simulation.agitationRate*agtions.size());
+
             return (timeElapsed + timeStep);
+
         }
         else {
             timeStepCalculated = false;
@@ -143,6 +148,7 @@ public class Configuration extends HashMap<Point, Monomer> {
                 timeElapsed += timeStep;
             }
         } else {
+
             isFinished = true;
 
             System.out.println("End this.simulation.");
@@ -158,9 +164,8 @@ public class Configuration extends HashMap<Point, Monomer> {
             if (this.simulation.agitationON) {
 
                 }
-            if (timeElapsed > this.simulation.recordingLength || isFinished) {
-                //saveRecord("dog.ser");
-                //   saveVideo("dog.ser");
+            if ((timeElapsed >= this.simulation.recordingLength && simulation.isRecording) || isFinished) {
+
                 this.simulation.isRecording = false;
                 this.simulation.isRunning = false;
                 this.simulation.recordingLength = 0;
@@ -169,8 +174,7 @@ public class Configuration extends HashMap<Point, Monomer> {
             }
 
             } else {
-              /*  System.out.print("#$@#");
-                recordFrameHistory.add(Triplet.with(1, frametime, monList));    */
+
             }
 
 
@@ -215,6 +219,7 @@ public class Configuration extends HashMap<Point, Monomer> {
                 }
             }
         }
+
 
         return ret;
     }
@@ -535,6 +540,7 @@ public class Configuration extends HashMap<Point, Monomer> {
     {
         timeElapsed = 0;
         markovStep =0;
+        timeStep = 0;
 
 
 
